@@ -22,25 +22,30 @@ class MainWindow(QMainWindow):
         self.SatelliteImage = self.findChild(QLabel, 'SatelliteImage')
         self.Graphic = self.findChild(QWidget, 'Graphic')
 
-        self.OpenFileAction.triggered.connect(self.clicker)
+        self.OpenFileAction.triggered.connect(self.open_file_click)
+        self.FileProcessingButton.clicked.connect(self.file_processing)
 
         self.show()
 
     
-    def clicker(self):
+    def open_file_click(self) -> None:
         self.fname, _ = QFileDialog.getOpenFileName(self, 'Open File', '', 'WAV Files (*.wav)')
         
         if self.fname:
-            satellite_data = NOAADecoder(self.fname, 60)
+            self.satellite_data = NOAADecoder(self.fname)
 
             layout = QVBoxLayout(self.Graphic)
-            layout.addWidget(satellite_data.get_signal_plot())
+            layout.addWidget(self.satellite_data.get_signal_plot())
 
-            self.FileNameTitle.setText(satellite_data.img_save_path)
+            self.FileNameTitle.setText(self.satellite_data.img_save_path)
 
-            self.pixmap = QPixmap(satellite_data.img_save_path)
-            self.pixmap = self.pixmap.scaled(500, 500, QtCore.Qt.KeepAspectRatio)
-            self.SatelliteImage.setPixmap(self.pixmap)
+
+    def file_processing(self) -> None:
+        self.satellite_data.decode_file()
+
+        self.pixmap = QPixmap(self.satellite_data.img_save_path)
+        self.pixmap = self.pixmap.scaled(500, 500, QtCore.Qt.KeepAspectRatio)
+        self.SatelliteImage.setPixmap(self.pixmap)
 
 
 if __name__ == "__main__":
