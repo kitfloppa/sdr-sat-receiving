@@ -1,19 +1,27 @@
 from __future__ import annotations, print_function
 
-import SoapySDR
-import numpy as np
-import struct
+import os
 import time
+import json
+import struct
 import datetime
 import requests
-import json
+import SoapySDR
+import numpy as np
 
 from configparser import ConfigParser
 
 
+CONFIG_PATH = 'config.ini'
+
+# N2YO API -> https://www.n2yo.com/api/
 def get_start_record_time(satellite_id: str, lat: str, lon: str, days: int) -> tuple[datetime.datetime, datetime.datetime]:
     configuration = ConfigParser()
-    configuration.read('config.ini')
+
+    if not os.path.exists(CONFIG_PATH):
+        raise FileExistsError('Config file is not exist.')
+
+    configuration.read(CONFIG_PATH)
     
     apiurl = 'https://api.n2yo.com/rest/v1/satellite/visualpasses/'
     apikey = configuration['N2YO']['apikey']
@@ -95,6 +103,7 @@ def sdr_record(device, frequency, sample_rate, gain, blocks_count):
         wav.write('RIFF'.encode('utf-8'))
         wav.write(struct.pack('<i', 4 + (8 + subchunk_size) + (8 + subchunk2_size)))  # Size of the overall file
         wav.write('WAVE'.encode('utf-8'))
+        
         # Write fmt subchunk
         wav.write('fmt '.encode('utf-8'))  # chunk type
         wav.write(struct.pack('<i', subchunk_size))  # subchunk data size (16 for PCM)
@@ -104,6 +113,7 @@ def sdr_record(device, frequency, sample_rate, gain, blocks_count):
         wav.write(struct.pack('<i', int(sample_rate * bits_per_sample * channels_num/ 8)))  # byte rate
         wav.write(struct.pack('<h', block_alignment))  # block alignment
         wav.write(struct.pack('<h', bits_per_sample))  # sample depth
+        
         # Write data subchunk
         wav.write('data'.encode('utf-8'))
         wav.write(struct.pack('<i', subchunk2_size))

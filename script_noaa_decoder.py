@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import List, Optional
 
-import os
 import argparse
 import numpy as np
 
@@ -30,7 +29,6 @@ SYNCHRONIZATION_SEQUENCE = np.array([0, 0, 255, 255, 0, 0, 255, 255,
                                      0, 0, 255, 255, 0, 0, 255, 255,
                                      0, 0, 255, 255, 0, 0, 0, 0, 0,
                                      0, 0, 0]) - 128
-
 RESAMPLE_RATE = 20800
 
 
