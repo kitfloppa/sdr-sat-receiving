@@ -16,6 +16,17 @@ CONFIG_PATH = 'config.ini'
 
 # N2YO API -> https://www.n2yo.com/api/
 def get_start_record_time(satellite_id: str, lat: str, lon: str, days: int) -> tuple[datetime.datetime, datetime.datetime]:
+    '''
+    Time of passage of the specified satellite in UTC + 10h
+
+    :param satellite_id: satellite id in n2yo
+    :param lat: observer's latitide
+    :param lon: observer's longitude
+    :param days: number of days of prediction (max 10)
+    
+    :return: satellite flyby start time and satellite flyby end time
+    '''
+    
     configuration = ConfigParser()
 
     if not os.path.exists(CONFIG_PATH):
@@ -28,7 +39,11 @@ def get_start_record_time(satellite_id: str, lat: str, lon: str, days: int) -> t
 
     query = apiurl + satellite_id + '/' + lat + '/' + lon + '/0/' + str(days) + '/10/&apiKey=' + apikey
     n2yo_out = requests.get(query).text
-    n2yo_out_dict = json.loads(n2yo_out)
+
+    if n2yo_out:
+        n2yo_out_dict = json.loads(n2yo_out)
+    else:
+        raise ValueError('According to the specified parameters, the satellite does not fly over this region.')
 
     start_time = datetime.datetime.utcfromtimestamp(n2yo_out_dict['passes'][0]['startUTC'] + 36000)
     end_time = datetime.datetime.utcfromtimestamp(n2yo_out_dict['passes'][0]['endUTC'] + 36000)
@@ -37,6 +52,12 @@ def get_start_record_time(satellite_id: str, lat: str, lon: str, days: int) -> t
 
 
 def wait_for_start(start_receiving_time: datetime.datetime) -> None:
+    '''
+    Function for waiting for satellite passage
+
+    :param start_receiving_time: time to finish the function
+    '''
+    
     # Wait for the start
     while True:
         time_now = datetime.datetime.now()
@@ -55,14 +76,30 @@ def wait_for_start(start_receiving_time: datetime.datetime) -> None:
             break
 
 
-def sdr_init():
+def sdr_init() -> SoapySDR.Device:
+    '''
+    Creating a signal receiver object
+
+    :return: sdr device object
+    '''
+
     soapy_device = "rtlsdr"
     device = SoapySDR.Device({"driver": soapy_device})
 
     return device
 
 
-def sdr_record(device, frequency, sample_rate, gain, blocks_count):
+def sdr_record(device, frequency, sample_rate, gain, blocks_count) -> None:
+    '''
+    Receiving and recording a radio signal
+
+    :param device: sdr device object
+    :param frequency: value of frequency
+    :param sample_rate: value of sample rate
+    :param gain: value of gain
+    :param blocks_count: number of record blocks 
+    '''
+    
     print("Frequency:", frequency)
     print("Sample rate:", sample_rate)
     print("Gain:", gain)
@@ -136,6 +173,7 @@ def sdr_record(device, frequency, sample_rate, gain, blocks_count):
     device.deactivateStream(stream)
     device.closeStream(stream)
 
+
 if __name__ == "__main__":
     print("App started")
 
@@ -147,12 +185,13 @@ if __name__ == "__main__":
     noaa_19_id = '33591'
 
     start_record_time, end_record_time = get_start_record_time(noaa_19_id, '43.105647', '131.873504', 1)
+    blocks_count = int((end_record_time - start_record_time).total_seconds()) * 2
     wait_for_start(start_record_time)
 
     device = sdr_init()
 
     t_start = time.time()
 
-    sdr_record(device, frequency=noaa_19_frequency, sample_rate=250000, gain=35, blocks_count=10)
+    sdr_record(device, frequency=noaa_19_frequency, sample_rate=250000, gain=35, blocks_count=blocks_count)
 
     print("Recording complete, time = %ds" % int(time.time() - t_start))

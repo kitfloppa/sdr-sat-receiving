@@ -38,6 +38,13 @@ class NOAADecoder:
                  white_point: int,
                  components: Optional(List[str]),
                 ) -> None:
+        '''
+        Class for decode NOAA APT data
+
+        :param black_point: dynamic range lower bound, percent
+        :param white_point: dynamic range upper bound, percent
+        :param components: portions of the image to preserve/filter
+        '''
     
         self.black_point = black_point
         self.white_point = white_point
@@ -49,6 +56,7 @@ class NOAADecoder:
         '''
         Load the audio and convert to Hilbert transformed amplitude info
 
+        :param file_path: path to wav file
         :return: amplitude information corresponding to pixel intensity
         '''
 
@@ -153,6 +161,13 @@ class NOAADecoder:
     
 
     def decode(self, file_path: str, out_file_path: str) -> None:
+        '''
+        Function for decode record to image
+
+        :param file_path: path to wav file
+        :param out_file_path: path to output image file
+        '''
+        
         # Load the audio and convert to Hilbert transformed amplitude info
         data = self.audio_to_hilbert(file_path)
 

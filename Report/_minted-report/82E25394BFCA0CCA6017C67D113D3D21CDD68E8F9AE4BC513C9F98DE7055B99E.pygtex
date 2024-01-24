@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{CONFIG\PYGZus{}PATH} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}config.ini\PYGZsq{}}
+
+\PYG{c+c1}{\PYGZsh{} N2YO API \PYGZhy{}\PYGZgt{} https://www.n2yo.com/api/}
+\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}start\PYGZus{}record\PYGZus{}time}\PYG{p}{(}\PYG{n}{satellite\PYGZus{}id}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
+			  \PYG{n}{lat}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
+			  \PYG{n}{lon}\PYG{p}{:} \PYG{n+nb}{str}\PYG{p}{,}
+			  \PYG{n}{days}\PYG{p}{:} \PYG{n+nb}{int}
+\PYG{p}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n+nb}{tuple}\PYG{p}{[}\PYG{n}{datetime}\PYG{o}{.}\PYG{n}{datetime}\PYG{p}{,} \PYG{n}{datetime}\PYG{o}{.}\PYG{n}{datetime}\PYG{p}{]:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    Time of passage of the specified satellite in UTC + 10h}
+
+\PYG{l+s+sd}{    :param satellite\PYGZus{}id: satellite id in n2yo}
+\PYG{l+s+sd}{    :param lat: observer\PYGZsq{}s latitide}
+\PYG{l+s+sd}{    :param lon: observer\PYGZsq{}s longitude}
+\PYG{l+s+sd}{    :param days: number of days of prediction (max 10)}
+
+\PYG{l+s+sd}{    :return: satellite flyby start time and satellite}
+\PYG{l+s+sd}{    	 flyby end time}
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\end{Verbatim}
