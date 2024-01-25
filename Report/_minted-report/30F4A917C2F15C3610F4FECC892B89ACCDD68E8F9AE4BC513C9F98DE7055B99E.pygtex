@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+ \PYG{k}{def} \PYG{n+nf}{audio\PYGZus{}to\PYGZus{}hilbert}\PYG{p}{(}\PYG{n}{file\PYGZus{}path}\PYG{p}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{:}
+        \PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{        Load the audio and convert to Hilbert transformed}
+\PYG{l+s+sd}{        	amplitude info}
+
+\PYG{l+s+sd}{        :param file\PYGZus{}path: path to wav file}
+\PYG{l+s+sd}{        :return: amplitude information corresponding to}
+\PYG{l+s+sd}{        	pixel intensity}
+\PYG{l+s+sd}{        \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\end{Verbatim}

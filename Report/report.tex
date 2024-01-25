@@ -46,31 +46,53 @@
 	
 	Суть проекта заключается в создании станции (на основе RTL-SDR) по приему и обработки \href{https://en.wikipedia.org/wiki/Automatic_picture_transmission}{APT (Automatic Picture Transmission)} сигнала со спутников дистанционного зондирования Земли на базе лаборатории спутниковго мониторинга ДВФУ. \\
 	
-	\noindent Станция предствляет собой Антену SDR ....
-	
-	\subsection*{Лаборатория спутниковго мониторинга ДВФУ}
-	\addcontentsline{toc}{subsection}{Лаборатория спутниковго мониторинга ДВФУ}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=300px]{antenna.jpg}
+		\caption{Антенны на крыше G корпуса.}
+	\end{figure}
 	
 	\subsection*{APT (Automatic Picture Transmission)}
 	\addcontentsline{toc}{subsection}{APT (Automatic Picture Transmission)}
 	
 	\textbf{Automatic Picture Transmission} - это стандарт для аналоговой передачи данных (изображений) по радиоканалу с использованием специализированных радиопередатчиков, установленных на метеорологических спутниках. \\ 
 	
-	\noindent Стандарт APT был разработан подразделением \href{https://www.noaa.gov/}{NOAA National Earth Satellite Service} в 1960-х. Впервые был описан в статье \href{https://ntrs.nasa.gov/api/citations/19630013799/downloads/19630013799.pdf}{``The Automatic Picture Transmission (APT) TV camera system for meteorological satellites''}. Первый спутник на полярной орбите, передававший изображения в формате APT — TIROS-N.
+	\noindent Стандарт APT был разработан подразделением \href{https://www.noaa.gov/}{NOAA National Earth Satellite Service} в 1960-х. Впервые был описан в статье \href{https://ntrs.nasa.gov/api/citations/19630013799/downloads/19630013799.pdf}{``The Automatic Picture Transmission (APT) TV camera system for meteorological satellites''}. Первый спутник на полярной орбите, передававший изображения в формате APT — TIROS-N. \\
 	
+	\noindent Что касается предоваемых данных, то в одном канале непрерывно передаётся изображение с длинноволнового ИК-канала (10,8 микрометров), а в другом канале на освещённой стороне Земли передаётся изображение в ближнем (близком к видимому свету) ИК диапазоне (0,86 микрометра), а на не освещённой — в среднем ИК-диапазоне (3,75 микрометра). \\
+	
+	\noindent Структура APT формата передачи данных:
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=300px]{apt_format.png}
+		\caption{Структура APT.}
+	\end{figure}
+	
+	\pagebreak
 	\subsection*{RTL-SDR}
 	\addcontentsline{toc}{subsection}{RTL-SDR}
 	
+	SDR (Software-defined radio) - это  радиопередатчик или радиоприёмник, использующий технологию, позволяющую с помощью программного обеспечения устанавливать или изменять рабочие радиочастотные параметры, включая, в частности, диапазон частот, тип модуляции или выходную мощность.
 	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=250px]{sdr.jpeg}
+		\caption{Пример SDR.}
+	\end{figure}
 	
 	\pagebreak
 	\section*{Аппаратная реализация}
 	\addcontentsline{toc}{section}{Аппаратная реализация}
 	
 	% Аппаратная часть станции представляет собой две антенны
-	Для приёма сингала используются две антенны X-Quad на ??? и ??? МГц закреплённые на поворотном устройстве (TODO) на крыше корпуса G кампуса ДВФУ. Поворотное устройство управляется программно с компьютера, находящегося в кабинете G542 (на крышу протянуты провода).
+	Для приёма сингала используются две антенны X-Quad на 400+ Мгц и 130+ МГц закреплённые на поворотном устройстве на крыше корпуса G кампуса ДВФУ. Поворотное устройство управляется программно с компьютера, находящегося в кабинете G542 (на крышу протянуты провода).
 	
-	TODO картинки антенн и контрллера поворота
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=250px]{control.jpg}
+		\caption{Контроллер поворота.}
+	\end{figure}
 	
 	В рамках проекта стояла задача разработать аппаратную систему, позволяющую принимать и обрабатывать радиосигналы с помощью программно определяемых радиосистем (RTL-SDR). Желаемые качества такой системы были следующие:
 	\begin{itemize}
@@ -90,7 +112,6 @@
 	
 	Также в каждом из вариантов предполагается питание этого оборудования от источника постоянного тока расположенного в помещении. Для того, чтобы доставить стабильную мощность оборудованию, по линии питания подаётся напряжение 14В и используется регулятор для понижения напряжения до 5В.
 	
-	\pagebreak
 	\subsubsection*{Вариант №1}
 	\addcontentsline{toc}{subsubsection}{Вариант №1}
 	
@@ -104,7 +125,6 @@
 	
 	Такой вариант позволил бы уменьшить количество оборудования на крыше и его энергопотребление, упростив систему и увеличив отказоустойчивость системы по сравнению в вариантом №2. Однако, требовалось проверить, будет ли удлинитель USB предоставлять достаточную скорость передачи данных для стабильной работы системы.
 	
-	\pagebreak
 	\subsubsection*{Вариант №2}
 	\addcontentsline{toc}{subsubsection}{Вариант №2}
 	
@@ -144,10 +164,13 @@
 	\section*{Программная реализация}
 	\addcontentsline{toc}{section}{Программная реализация}
 	
+	Исходный код скриптов можно найти в следующем \href{https://github.com/kitfloppa/sdr-sat-receiving/tree/main}{репозитории}.
+	
 	\subsection*{Автоматизация приема APT сигнала на RTL-SDR}
 	\addcontentsline{toc}{subsection}{Автоматизация приема APT сигнала на RTL-SDR}
 	
-	Для автоматизации приема APT сигнала был реализован скрипт на языке программирования Python. \\
+	Для автоматизации приема APT сигнала был реализован скрипт \\
+	$script\_noaa\_data\_receiver.py$ на языке программирования Python. \\
 	
 	\noindent Автоматизация заключается в следующем:
 	
@@ -187,7 +210,7 @@ def get_start_record_time(satellite_id: str,
     '''
 	\end{minted}
 	
-	\noindent Полную релизацию функции, можно найти \href{...}{тут}. \\
+	\noindent Полную реализацию функции с описанием, можно найти \href{https://github.com/kitfloppa/sdr-sat-receiving/blob/main/script_noaa_data_receiver.py#L18}{тут}. \\
 	
 	\pagebreak
 	\subsubsection*{Запиcь и сохранение радио сигнала на нужной волне во время пролета спутника}
@@ -217,13 +240,13 @@ def sdr_record(device,
     '''
 	\end{minted}
 	
-	\noindent Полную релизацию функции, можно найти \href{...}{тут}. \\
+	\noindent Полную реализацию функции с описанием, можно найти \href{https://github.com/kitfloppa/sdr-sat-receiving/blob/main/script_noaa_data_receiver.py#L92}{тут}. \\
 	
 	\pagebreak
 	\subsection*{Декодирование принятого APT сигнала спутника NOAA-19}
 	\addcontentsline{toc}{subsection}{Декодирование принятого APT сигнала спутника NOAA-19}
 	
-	Для превращения сигнала от спутника NOAA-19 в изображение реализованн класс $NOAADecoder$.
+	Для превращения сигнала от спутника NOAA-19 в изображение реализованн класс $NOAADecoder$ в скрипте $script\_noaa\_decoder.py$ на языке Python.
 	
 	\begin{minted}{Python}
 class NOAADecoder:
@@ -243,17 +266,136 @@ class NOAADecoder:
         		preserve/filter
         '''
 	\end{minted}
-	
-	\noindent Полную релизацию функции, можно найти \href{...}{тут}. \\
-	
+
+	\noindent Полную реализацию функции с описанием, можно найти \href{https://github.com/kitfloppa/sdr-sat-receiving/blob/main/script_noaa_decoder.py#L35}{тут}. \\
+
 	\noindent Декодирование сигнала в изображение происходит следующим образом:
-	
+
 	\begin{itemize}
-		\item \textbf{Передискретизация до частоты 20800 Гц}.
+		\item \textbf{Передискретизация сигнала до частоты 20800 Гц}.
 		\item \textbf{Преобразование в аналитический сигнал (\href{https://en.wikipedia.org/wiki/Hilbert_transform}{Преобразование Гилберта})}.
 		\item \textbf{Нормирование значний сигнала от 0 до 255}.
 		\item \textbf{Нахождение положения кадров синхронизации сигнала APT}.
 		\item \textbf{Выбор сектора для формирования изображения}.
 	\end{itemize}
+
+	\pagebreak
+	\subsubsection*{Передискретизация сигнала до частоты 20800 Гц и Преобразование в аналитический сигнал}
+	\addcontentsline{toc}{subsubsection}{Передискретизация сигнала до частоты 20800 Гц и Преобразование в аналитический сигнал}
 	
+	Сам процесс докодирования сигнала заключается в этих двух последовательных этапах, где на выходе мы имеем аналитический сигнал, где каждое значние представляет собой пиксел, телеметрию или мусорные значения. \\
+	
+	За эту часть отвечает функция $audio\_to\_hilbert$:
+	
+	\begin{minted}{Python}
+ def audio_to_hilbert(file_path) -> np.ndarray:
+        '''
+        Load the audio and convert to Hilbert transformed 
+        	amplitude info
+
+        :param file_path: path to wav file
+        :return: amplitude information corresponding to 
+        	pixel intensity
+        '''
+	\end{minted}
+	
+	\noindent Полную реализацию функции с описанием, можно найти \href{https://github.com/kitfloppa/sdr-sat-receiving/blob/main/script_noaa_decoder.py#L55}{тут}. \\
+	
+	\pagebreak
+	\subsubsection*{Нормирование значний сигнала от 0 до 255}
+	\addcontentsline{toc}{subsubsection}{Нормирование значний сигнала от 0 до 255}
+	
+	Из за того, что сигналы могут иметь большой разброс значений, мы нормируем полученные данные, что бы изображение корректно отобразилось. \\
+	
+	\noindent За это отвечает функция $quantize$:
+	
+	\begin{minted}{Python}
+def quantize(data: np.ndarray, 
+	      black_point: int, 
+	      white_point: int) -> np.ndarray:
+        '''
+        Digitize signal to valid pixel intensities in the 
+        	uint8 range
+
+        :param black_point: dynamic range lower bound, 
+        	percent
+        :param white_point: dynamic range upper bound, 
+        	percent
+        :return: quantized numpy array to uint8
+        '''
+	\end{minted}
+	
+	\noindent Полную реализацию функции с описанием, можно найти \href{https://github.com/kitfloppa/sdr-sat-receiving/blob/main/script_noaa_decoder.py#L84}{тут}. \\
+	
+	\pagebreak
+	\subsubsection*{Нахождение положения кадров синхронизации сигнала APT}
+	\addcontentsline{toc}{subsubsection}{Нахождение положения кадров синхронизации сигнала APT}
+	
+	Что бы корректно определить полосы скаинирования и преобразовать одномерный массив данных в двумерное изображение, требуется сопоставить строки по синхросерии, которая известна. \\
+	
+	\noindent За это отвечает функция $reshape$:
+	
+	\begin{minted}{Python}
+SYNCHRONIZATION_SEQUENCE = np.array([0, 0, 255, 255, 0, 0, 
+				  255, 255, 0, 0, 255, 
+				  255, 0, 0, 255, 255,
+				  0, 0, 255, 255, 0, 0, 
+				  255, 255, 0, 0, 255, 
+				  255, 0, 0, 0, 0, 0, 0, 
+				  0, 0]) - 128	
+	
+def reshape(data: np.ndarray,
+                synchronization_sequence: np.ndarray =
+                SYNCHRONIZATION_SEQUENCE,
+                minimum_row_separation: int = 2000
+) -> np.ndarray:
+        '''
+        Reshape the numpy array to a 2D image array
+
+        :param synchronization_sequence: sequence to 
+        	indicate row start
+        :param minimum_row_separation: minimum columns of 
+        	separation
+            (a hair less than 2080)
+        :return: a 2D reshaped image array
+        '''
+	\end{minted}
+	
+	\noindent Полную реализацию функции с описанием, можно найти \href{https://github.com/kitfloppa/sdr-sat-receiving/blob/main/script_noaa_decoder.py#L101}{тут}. \\
+	
+	\pagebreak
+	\subsubsection*{Выбор сектора для формирования изображения}
+	\addcontentsline{toc}{subsubsection}{Выбор сектора для формирования изображения}
+	
+	Из полученного двумерного массива данных, нас интересует только $channel A$  и $channel B$, так как только они содержат изображения. \\
+	
+	\noindent За это отвечает функция $select\_image\_components$:
+	
+	\begin{minted}{Python}
+def select_image_components(data: np.ndarray, 
+                                components: 
+                                Optional[List[str]] = 
+                                ['image_a', 'image_b']
+) -> np.ndarray:
+        '''
+        Select the image components to include
+
+        :param components: portions of the image to 
+        	preserve/filter
+        :return: image array with just the appropriate 
+        	image components
+        '''
+	\end{minted}
+	
+	\noindent Полную реализацию функции с описанием, можно найти \href{https://github.com/kitfloppa/sdr-sat-receiving/blob/main/script_noaa_decoder.py#L139}{тут}. \\
+	
+	\pagebreak
+	\section*{Список литературы}
+	\addcontentsline{toc}{section}{Список литературы}
+	
+	\begin{enumerate}
+		\item \href{https://noaa-apt.mbernardi.com.ar/how-it-works.html}{Как работает декодер APT формата}
+		\item \href{https://github.com/pothosware/SoapySDR/wiki/PythonSupport}{SoapySDR for Python}
+		\item \href{https://en.wikipedia.org/wiki/Automatic_picture_transmission}{Automatic picture transmission}
+	\end{enumerate}
 \end{document}		

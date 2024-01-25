@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{quantize}\PYG{p}{(}\PYG{n}{data}\PYG{p}{:} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{,}
+	      \PYG{n}{black\PYGZus{}point}\PYG{p}{:} \PYG{n+nb}{int}\PYG{p}{,}
+	      \PYG{n}{white\PYGZus{}point}\PYG{p}{:} \PYG{n+nb}{int}\PYG{p}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ndarray}\PYG{p}{:}
+        \PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{        Digitize signal to valid pixel intensities in the}
+\PYG{l+s+sd}{        	uint8 range}
+
+\PYG{l+s+sd}{        :param black\PYGZus{}point: dynamic range lower bound,}
+\PYG{l+s+sd}{        	percent}
+\PYG{l+s+sd}{        :param white\PYGZus{}point: dynamic range upper bound,}
+\PYG{l+s+sd}{        	percent}
+\PYG{l+s+sd}{        :return: quantized numpy array to uint8}
+\PYG{l+s+sd}{        \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\end{Verbatim}
